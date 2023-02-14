@@ -4,40 +4,49 @@ from PIL import Image
 import numpy as np
 import os 
 from django.core.files.storage import FileSystemStorage
-import pickle
+from torchvision import transforms
 
 
 media = 'media'
 model= torch.load('best_model.pth')
 
-
-
 def makepredictions(path):
 
-    img= Image.open(path)
-    img_d=img.resize((244,244))
+    img= Image.open(path) 
+    # transform the image
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
 
-    if len(np.array(img_d).shape)<4:
-        rgb_img = Image.new("RGB", img_d.size)
-        rgb_img.paste(img_d)
-    else:
-        rgb_img=img_d
 
+    image_transforms = transforms.Compose([
+        transforms.Resize((224, 224,)),
+        transforms.ToTensor(),
+        transforms.Normalize(torch.Tensor(mean), torch.Tensor(std))
+
+    ])
+
+    img_d=image_transforms(img)
+    img_d=img_d.unsqueeze(0)
+    output=model(img_d)
+
+    classes = [
+    "ants",
+    "bees",
+    ]
+
+    # calculating probability of one img with respect to the other image class
+    acc = torch.nn.functional.softmax(output, dim=1)
+    final_acc = acc * 100
+
+    final_acc=final_acc.tolist() #convert into list
+
+    _, predictions = torch.max(output.data, 1)
+    res = classes[predictions.item()]
+     
+
+    return [res,final_acc]
     
-
-    rgb_img=np.array(rgb_img, dtype=np.float64)
-    rgb_img=rgb_img.reshape(1,244,244,3)
-
-# predictions
-
-    predictions=model.predict(rgb_img)
-    a=int(np.argmax(predictions))
-    if a==1:
-        a="Result: ants"
-    else: 
-        a="Result: bees"
-    return a
-
+  
 
 
 
