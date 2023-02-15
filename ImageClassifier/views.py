@@ -5,7 +5,7 @@ import numpy as np
 import os 
 from django.core.files.storage import FileSystemStorage
 from torchvision import transforms
-
+from itertools import chain
 
 media = 'media'
 model= torch.load('best_model.pth')
@@ -34,17 +34,21 @@ def makepredictions(path):
     "bees",
     ]
 
+    
+
     # calculating probability of one img with respect to the other image class
     acc = torch.nn.functional.softmax(output, dim=1)
     final_acc = acc * 100
 
     final_acc=final_acc.tolist() #convert into list
 
+    # classes={0:["ants",final_acc[0]], 1:["bees",final_acc[1]] }
+
     _, predictions = torch.max(output.data, 1)
     res = classes[predictions.item()]
-     
+    #res=predictions.item()
 
-    return [res,final_acc]
+    return final_acc
     
   
 
@@ -67,8 +71,16 @@ def index(request):
         fss= FileSystemStorage()
         file=fss.save(upload.name, upload)
         file_url=fss.url(file)
-        predictions= makepredictions(os.path.join(media,file))
-        return render(request,'index.html',{'pred':predictions,'file_url':file_url})
+        predictions2d= makepredictions(os.path.join(media,file))
+        #converting the 2d list into 1d
+        predictions=[j for sub in predictions2d for j in sub]
+
+        context={
+            'ant':("%.2f" % predictions[0]),
+            'bee': ("%.2f" % predictions[1]),
+        }
+
+        return render(request,'index.html',{'pred':context,'file_url':file_url})
 
 
 
