@@ -79,8 +79,12 @@ def index(request):
             'ant':("%.2f" % predictions[0]),
             'bee': ("%.2f" % predictions[1]),
         }
-
-        return render(request,'index.html',{'pred':context,'file_url':file_url})
+         
+        #key with maximum probability 
+        keymax=max(zip(context.values(),context.keys()))[1]
+        keymax=keymax.upper
+                
+        return render(request,'index.html',{'pred':context,'file_url':file_url,'max':keymax})
 
 
 

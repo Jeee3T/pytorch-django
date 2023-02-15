@@ -7,7 +7,8 @@
     <title>Image Classifier</title>
 </head>
 <body>
-    <h1>Welcome to the Image classification WebApp</h1>
+   
+    <h1>ANT AND BEE CLASSIFIER</h1>
     <p>Upload an Image</p>
 
 
@@ -38,22 +39,18 @@
 {% comment %} <p>{{pred[0]}}</p> {% endcomment %}
 
 
-{% for key , value in pred.items %}
+ {% for key , value in pred.items %}
 <p>{{key}}: {{value}}%</p>
 
 {% endfor %}
 
-{% for key, value in pred.items %}
-    {% if value.0 > value.1 %}
-        <p>Result : {{key}}</p>
-    {% elif value.1 > value.0 %}
-        <p>Result: {{key}}</p>
-{% endif %}
-{% endfor %}
 
-{% comment %} {{pred}}     {% endcomment %}
-        
+<p>Result: {{max}}</p>
+ 
+<br>
+<br>
+   
+  
 
-    
 </body>
 </html>
