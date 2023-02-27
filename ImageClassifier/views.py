@@ -6,6 +6,9 @@ import os
 from django.core.files.storage import FileSystemStorage
 from torchvision import transforms
 from itertools import chain
+from django.http import JsonResponse
+
+
 
 media = 'media'
 model= torch.load('best_model.pth')
@@ -85,7 +88,8 @@ def index(request):
         keymax=keymax.upper
                 
         return render(request,'index.html',{'pred':context,'file_url':file_url,'max':keymax})
-
+    
+        return JsonResponse()
 
 
     return render(request,'index.html')

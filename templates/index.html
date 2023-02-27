@@ -1,60 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Classifier</title>
-</head>
-<body>
+
+    <style>
+      .center {
+        position: absolute;
+        right: 300px;
+        left: 500px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    
+    
+
    
-    <h1>ANT AND BEE CLASSIFIER</h1>
+<div class="center">
+
+  <h1><b>Ant and Bee Classifier</b></h1>
     <p>Upload an Image</p>
-
-
     <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-    <input type="file" name="upload" accept=".jpeg, .jpg, .png">
-    <input type="submit" value="Predict Image">
+      {% csrf_token %}
+      <input type="file" name="upload" accept=".jpeg, .jpg, .png" />
+      <input type="submit" value="Predict Image" />
     </form>
 
-    <br>
-    <br>
-    <br>
-    {% comment %} <p></p>{{file_url}}<p></p> {% endcomment %}
-
-  
-
-  {% comment %} {% for i in pred %}
-  
-  <p>{{pred[i]}}</p>
-
-  {% endfor %} {% endcomment %}
-  
-
-  {% comment %} {% for i in prediction  %}
-  {{i}}
-  {% endfor %} {% endcomment %}
- 
-{% comment %} <p>{{pred[0]}}</p> {% endcomment %}
-
-
- {% for key , value in pred.items %}
-<p>{{key}}: {{value}}%</p>
-
-{% endfor %}
-
-
-<p>Result: {{max}}</p>
- 
 <br>
-<br>
-   
- 
-  <p>Uploaded to:<a href="{{ file_url }}">{{ file_url }}</a></p>
+<br><br>
+
+  <h3><u>Results</u>:</h3>
+  {% for key , value in pred.items %}
+    <p>{{key}}: {{value}}%</p>
+
+    {% endfor %}
+
+    <p>The input image is {{max}}</p>
+
+    <br />
+    <br />
+
+    <p>Uploaded to:<a href="{{ file_url }}">{{ file_url }}</a></p>
+    
+</div>
+    <br />
+    <br />
 
 
-
-
-</body>
+    
+  </body>
 </html>
