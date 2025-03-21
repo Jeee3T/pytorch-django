@@ -11,7 +11,7 @@ from django.http import JsonResponse
 
 
 media = 'media'
-model= torch.load('best_model.pth')
+model= torch.load('best_model.pth', weights_only=False)
 
 def makepredictions(path):
 

@@ -7,51 +7,115 @@
     <title>Image Classifier</title>
 
     <style>
-      .center {
-        position: absolute;
-        right: 300px;
-        left: 500px;
-        padding: 10px;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(to right, #ff9966, #ff5e62);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 400px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #555;
+        font-size: 16px;
+      }
+
+      form {
+        margin-top: 20px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .upload-label {
+        background: #ff5e62;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+      }
+
+      input[type="submit"] {
+        background: #333;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin-top: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.3s;
+      }
+
+      input[type="submit"]:hover {
+        background: #555;
+      }
+
+      .results {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f8f8f8;
+      }
+
+      a {
+        color: #ff5e62;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
       }
     </style>
   </head>
 
   <body>
-    
-    
+    <div class="container">
+      <h1><b>Ant and Bee Classifier</b></h1>
+      <p>Upload an Image</p>
 
-   
-<div class="center">
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="file-upload" class="upload-label">Choose a File</label>
+        <input id="file-upload" type="file" name="upload" accept=".jpeg, .jpg, .png" />
+        <br />
+        <input type="submit" value="Predict Image" />
+      </form>
 
-  <h1><b>Ant and Bee Classifier</b></h1>
-    <p>Upload an Image</p>
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <input type="file" name="upload" accept=".jpeg, .jpg, .png" />
-      <input type="submit" value="Predict Image" />
-    </form>
+      <div class="results">
+        <h3><u>Results</u>:</h3>
+        {% for key, value in pred.items %}
+        <p>{{ key }}: {{ value }}%</p>
+        {% endfor %}
+        <p>The input image is <b>{{ max }}</b></p>
+      </div>
 
-<br>
-<br><br>
-
-  <h3><u>Results</u>:</h3>
-  {% for key , value in pred.items %}
-    <p>{{key}}: {{value}}%</p>
-
-    {% endfor %}
-
-    <p>The input image is {{max}}</p>
-
-    <br />
-    <br />
-
-    <p>Uploaded to:<a href="{{ file_url }}">{{ file_url }}</a></p>
-    
-</div>
-    <br />
-    <br />
-
-
-    
+      <p>Uploaded to: <a href="{{ file_url }}">{{ file_url }}</a></p>
+    </div>
   </body>
 </html>
